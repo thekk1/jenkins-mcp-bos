@@ -18,6 +18,7 @@ PAGE = 100            # Builds je Abfrage (allBuilds{a,b})
 MAX_PER_JOB = 2000    # aeltere Builds eines Jobs liest das Werkzeug nicht mehr
 MAX_RESULTS = 500     # Builds in der Antwort
 WORKERS = 8
+TIMEOUT = 30          # Sekunden je Abfrage; allBuilds mit Ausloesern braucht bei grossen Jobs mehr als die 5 s von mcp-jenkins
 TREE = ('allBuilds[number,timestamp,duration,result,building,url,'
         'actions[causes[_class,userId,userName,shortDescription,upstreamProject,upstreamBuild]]]{%d,%d}')
 
@@ -111,6 +112,7 @@ async def list_builds(ctx: Context, date_from: str, date_to: str = '', started_b
     start_ms, end_ms = int(start.timestamp() * 1000), int(end.timestamp() * 1000)
 
     client = jenkins(ctx)
+    client.timeout = max(getattr(client, 'timeout', 0) or 0, TIMEOUT)  # Client gilt nur fuer diese Anfrage
     me = client.request('GET', 'me/api/json', params={'tree': 'id,fullName'}, crumb=False).json()
     caller = {'id': me.get('id'), 'name': me.get('fullName')}
     wanted: set[str] = set()
