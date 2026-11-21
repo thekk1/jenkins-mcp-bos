@@ -17,7 +17,7 @@ from mcp_jenkins.server import mcp
 PAGE = 100            # Builds je Abfrage (allBuilds{a,b})
 MAX_PER_JOB = 2000    # aeltere Builds eines Jobs liest das Werkzeug nicht mehr
 MAX_RESULTS = 500     # Builds in der Antwort
-WORKERS = 8
+WORKERS = 2
 TIMEOUT = 30          # Sekunden je Abfrage; allBuilds mit Ausloesern braucht bei grossen Jobs mehr als die 5 s von mcp-jenkins
 TREE = ('allBuilds[number,timestamp,duration,result,building,url,'
         'actions[causes[_class,userId,userName,shortDescription,upstreamProject,upstreamBuild]]]{%d,%d}')
